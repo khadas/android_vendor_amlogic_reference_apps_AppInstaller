@@ -46,4 +46,5 @@
 	<string name="sata_device_str">SATA</string>
 	<string name="usb_device_str">USB</string>
 	<string name="cdrom_device_str">CD ROM</string>
+        <string name="success">Success</string>
 </resources>

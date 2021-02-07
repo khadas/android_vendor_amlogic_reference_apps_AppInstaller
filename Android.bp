@@ -1,0 +1,24 @@
+prebuilt_etc {
+    name: "privapp_whitelist_com.droidlogic.appinstaller",
+    vendor: true,
+    sub_dir: "permissions",
+    src: "com.droidlogic.appinstaller.xml",
+    filename_from_src: true,
+}
+android_app {
+    name: "AppInstaller",
+    privileged: true,
+    srcs: ["**/*.java"],
+    required: ["privapp_whitelist_com.droidlogic.appinstaller"],
+    vendor: true,
+    optimize: {
+        enabled: false,
+    },
+    dex_preopt: {
+        enabled: false,
+    },
+    sdk_version: "system_current",
+    certificate: "platform",
+    libs: ["droidlogic"],
+    static_libs: ["androidx.appcompat_appcompat"],
+}

@@ -55,13 +55,17 @@ class APKInfo extends Object {
         APKInfo (Context pcontext, String apkpath) {
             pkgmgr = pcontext.getPackageManager();
             PackageInfo pPkgInfo = pkgmgr.getPackageArchiveInfo (apkpath, PackageManager.GET_ACTIVITIES);
+            android.util.Log.d("Appinstall","pPkgInfo"+apkpath+" pPkgInfo != null"+(pPkgInfo != null));
             if (pPkgInfo != null) {
+                android.util.Log.d("Appinstall","pPkgInfo.packageName"+pPkgInfo.packageName+" / "+apkpath);
                 //get package's name in system
                 String[] curpkgnames = pkgmgr.canonicalToCurrentPackageNames (new String[] {pPkgInfo.packageName});
                 if ( (curpkgnames != null) && (curpkgnames.length > 0) && (curpkgnames[0] != null)) {
                     pCurPkgName = curpkgnames[0];
+                    android.util.Log.d("Appinstall","curpkgnames.length "+curpkgnames.length+"pCurPkgName"+pCurPkgName);
                 }
                 else {
+                    android.util.Log.d("Appinstall","--->pCurPkgName"+pCurPkgName);
                     pCurPkgName = pPkgInfo.packageName;
                 }
                 Resources pPkgRes = null;
@@ -126,9 +130,11 @@ class APKInfo extends Object {
         public boolean checkInstalled() {
             ApplicationInfo appinfo = null;
             try {
-                appinfo = pkgmgr.getApplicationInfo (pCurPkgName, PackageManager.GET_META_DATA);
+                appinfo = pkgmgr.getApplicationInfo (pCurPkgName, 0);
             }
             catch (NameNotFoundException e) {
+                e.printStackTrace();
+                 android.util.Log.d("TT","sssssssssssssss"+pCurPkgName);
                 appinfo = null;
             }
             if (appinfo == null) {
@@ -275,6 +281,7 @@ public class PackageAdapter extends BaseAdapter {
             CheckBox SelState = (CheckBox) layoutview.findViewById (m_CheckBox_SelState);
             SelState.setOnCheckedChangeListener (new SelStateListener (position));
             APKInfo pinfo = (APKInfo) getItem (position);
+
             FileName.setText (getTransPath(pinfo.filepath));
             AppName.setText (pinfo.getApplicationName());
             InstallState.setChecked (pinfo.checkInstalled());

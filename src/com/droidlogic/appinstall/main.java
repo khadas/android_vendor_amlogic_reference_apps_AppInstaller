@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
-
+import androidx.core.content.FileProvider;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -69,12 +69,12 @@ import android.os.Environment;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import com.droidlogic.app.FileListManager;
-
+import java.nio.file.Path;
 public class main extends Activity {
         private String TAG = "Appinstall";
         private String mVersion = "V1.1.3";
         private String mReleaseDate = "2017.09.26";
-
+        private static final int RET_OK = 0;
         public static final String KEY_NAME = "key_name";
         public static final String KEY_PATH = "key_path";
 
@@ -269,6 +269,7 @@ public class main extends Activity {
             if ( mScanRoot != null && mScanRoot.length() > 0 && mIsClickPathFlg) {
                 showChooseDev();
             } else {
+                Log.d(TAG,"notifyDataSetChanged");
                 pkgadapter.notifyDataSetChanged();
             }
         }
@@ -507,17 +508,32 @@ public class main extends Activity {
         //functions for installing and uninstalling
         public void install_apk (String apk_filepath) {
             Intent installintent = new Intent();
+            File apkFile = new File(apk_filepath);
             installintent.setAction (Intent.ACTION_VIEW);
-            installintent.setDataAndType(Uri.fromFile (new File (apk_filepath)), "application/vnd.android.package-archive");
-            startActivity (installintent);
+            Uri uri = FileProvider.getUriForFile(main.this,
+                "com.droidlogic.fileprovider",
+                apkFile);
+            installintent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            installintent.setDataAndType(uri, "application/vnd.android.package-archive");
+            startActivityForResult(installintent,RET_OK);
             mIsClickPathFlg = false;
+        }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            pkgadapter.notifyDataSetChanged();
+            if (resultCode == RET_OK) {
+                Toast.makeText(main.this,main.this.getText(R.string.success),Toast.LENGTH_SHORT).show();
+            }
+            Log.d(TAG,"requestCode"+requestCode+" resultCode"+resultCode);
         }
 
         public void uninstall_apk (String apk_pkgname) {
             Intent uninstallintent = new Intent();
             uninstallintent.setAction (Intent.ACTION_UNINSTALL_PACKAGE);
             uninstallintent.setData (Uri.fromParts ("package", apk_pkgname, null));
-            startActivity (uninstallintent);
+            startActivityForResult(uninstallintent,RET_OK);
             mIsClickPathFlg = false;
         }
 
