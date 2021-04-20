@@ -523,10 +523,6 @@ public class main extends Activity {
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             pkgadapter.notifyDataSetChanged();
-            if (resultCode == RET_OK) {
-                Toast.makeText(main.this,main.this.getText(R.string.success),Toast.LENGTH_SHORT).show();
-            }
-            Log.d(TAG,"requestCode"+requestCode+" resultCode"+resultCode);
         }
 
         public void uninstall_apk (String apk_pkgname) {
