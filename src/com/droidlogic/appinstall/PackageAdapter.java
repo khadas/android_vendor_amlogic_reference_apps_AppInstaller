@@ -278,7 +278,10 @@ public class PackageAdapter extends BaseAdapter {
             TextView AppName = (TextView) layoutview.findViewById (m_TextView_AppName);
             CheckBox InstallState = (CheckBox) layoutview.findViewById (m_CheckBox_InstallState);
             ImageView Appicon = (ImageView) layoutview.findViewById (m_ImgView_APPIcon);
+
             CheckBox SelState = (CheckBox) layoutview.findViewById (m_CheckBox_SelState);
+            SelState.setVisibility(View.GONE);
+
             SelState.setOnCheckedChangeListener (new SelStateListener (position));
             APKInfo pinfo = (APKInfo) getItem (position);
 
