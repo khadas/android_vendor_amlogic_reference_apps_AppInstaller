@@ -19,6 +19,7 @@ android_app {
     },
     sdk_version: "system_current",
     certificate: "platform",
-    libs: ["droidlogic"],
+    libs: ["droidlogic.software.core"],
+    uses_libs: ["droidlogic.software.core"],
     static_libs: ["androidx.appcompat_appcompat"],
 }
